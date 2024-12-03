@@ -16,7 +16,7 @@ PEERDIR(
     yt/yt/library/query/engine
     yt/yt/library/query/row_comparer
 
-    yt/yt/server/cell_balancer
+    yt/yt/server/cell_balancersss
     yt/yt/server/clock_server
     yt/yt/server/controller_agent
     yt/yt/server/cypress_proxy
