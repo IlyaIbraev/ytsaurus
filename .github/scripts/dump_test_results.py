@@ -169,10 +169,17 @@ def make_index_html(directory, current_depth=1):
         )
 
 
+def prepare_dir(dump_to_dir: str) -> None:
+    if os.path.exists(dump_to_dir):
+        return
+    os.mkdir(dump_to_dir)
+
+
 def main(report_path: str, dump_to_dir: str) -> None:
     report = load_results(report_path)
     results = report.get("results", {})
     statistics, tests = collect_tests(results)
+    prepare_dir(dump_to_dir)
     dump_failed_logs(tests, dump_to_dir)
     dump_html_file(statistics, tests, dump_to_dir)
     make_index_html(dump_to_dir)
