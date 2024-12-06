@@ -46,7 +46,7 @@ jobs:
           s3cmd put --recursive integration_tests s3://githubci/prod/
 
       - name: Calculate variables
-        id: var
+        id: vars
         run: | 
           TEST_FLAGS="-A -r --run-tagged-tests-on-yt --ytexec-bin ytsaurus/ytsaurus/.github/scripts/ytexec --pytest-args=\"-m 'not ignore_in_opensource'\" --build-results-report=results-report.json --build-results-report-tests-only"
           TEST_FLAGS="${TEST_FLAGS} --yt-dir=//home/devtools/tmp-cache --yt-proxy=${{ vars.CI_YT_PROXY }} --yt-store --yt-store-threads 8"
@@ -55,6 +55,6 @@ jobs:
       - name: Run size_s tests
         run: |
           TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}
-          TEST_FLAGS="{ TEST_FLAGS } --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
+          TEST_FLAGS="${ TEST_FLAGS } --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
           ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ytsaurus/ytsaurus/yt/yt/tests/integration/size_s
 
