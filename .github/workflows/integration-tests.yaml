@@ -1,0 +1,50 @@
+name: Integration tests
+on:
+  workflow_call:
+    inputs:
+      runs-on-value:
+        required: true
+        type: string
+      s3-config: 
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  check:
+    runs-on: ${{ inputs.runs-on-value }}
+    steps:
+      - name: Prepare directories
+        run: |
+          mkdir integration_tests
+          mkdir integration_tests/dump_directory
+          mkdir integration_tests/test_results
+
+      - name: Configure S3CMD
+        run: |
+          if [[ -z ${{ inputs.s3-config }} ]]
+          then
+            echo "S3 dumping disabled"
+          else
+            pip3 install s3cmd
+            echo ${{ inputs.s3-config }} > ~/.s3cfg
+          fi
+
+      - test-dump
+        run: |
+          s3cmd put --recursive integration_tests s3://githubci/prod
+
+      - name: Calculate variables
+        id: var
+        run: | 
+          TEST_FLAGS="-A -r --run-tagged-tests-on-yt --ytexec-bin ytsaurus/ytsaurus/.github/scripts/ytexec --pytest-args=\"-m 'not ignore_in_opensource'\" --build-results-report=results-report.json --build-results-report-tests-only"
+          TEST_FLAGS="${TEST_FLAGS} --yt-dir=//home/devtools/tmp-cache --yt-proxy=${{ vars.CI_YT_PROXY }} --yt-store --yt-store-threads 8"
+          echo "TEST_FLAGS=$TEST_FLAGS" >> $GITHUB_OUTPUT
+
+      - name: Run size_s tests
+        run: |
+          TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}
+          TEST_FLAGS="{ TEST_FLAGS } --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
+          ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ytsaurus/ytsaurus/yt/yt/tests/integration/size_s
+
+      # - name: Dump size_s tests
