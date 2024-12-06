@@ -5,8 +5,7 @@ on:
       runs-on-value:
         required: true
         type: string
-    secrets:
-      S3_CONFIG:
+      s3-config:
         required: false
         type: string
 
@@ -22,12 +21,12 @@ jobs:
 
       - name: Configure S3CMD
         run: |
-          if [[ -z ${{ secrets.S3_CONFIG }} ]]
+          if [[ -z ${{ inpus.s3-config }} ]]
           then
             echo "S3 dumping disabled"
           else
             pip3 install s3cmd
-            echo ${{ secrets.S3_CONFIG }} > ~/.s3cfg
+            echo ${{ inpus.s3-config }} > ~/.s3cfg
           fi
 
       - name: test-dump
