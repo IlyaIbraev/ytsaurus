@@ -182,6 +182,7 @@ jobs:
     secrets:
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
       S3_SECRET_NAME: ${{ secrets.S3_SECRET_NAME }}
+      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
     uses: ./.github/workflows/check-jobs.yaml
 
   # systest:

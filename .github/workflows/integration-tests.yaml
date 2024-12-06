@@ -10,10 +10,14 @@ on:
         required: false
       S3_SECRET_NAME:
         required: false
+      YA_YT_TOKEN:
+        required: false
 
 jobs:
   check:
     runs-on: ${{ inputs.runs-on-value }}
+    env:
+      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
     steps:
       - name: Prepare directories
         run: |
@@ -54,7 +58,7 @@ jobs:
 
       - name: Run size_s tests
         run: |
-          TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}
+          TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}"
           TEST_FLAGS="${ TEST_FLAGS } --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
           ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ytsaurus/ytsaurus/yt/yt/tests/integration/size_s
 
