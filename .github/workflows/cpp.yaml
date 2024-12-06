@@ -179,8 +179,9 @@ jobs:
       - checkout
     with:
       runs-on-value: hu9v2
-    secrets:  
-      S3_CONFIG: ${{ secrets.S3_CONFIG }}
+    secrets:
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_NAME: ${{ secrets.S3_SECRET_NAME }}
     uses: ./.github/workflows/check-jobs.yaml
 
   # systest:
