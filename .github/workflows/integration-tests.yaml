@@ -62,7 +62,7 @@ jobs:
           pwd
 
           mkdir ~/.yt || true
-          cat ${YT_TOKEN} > ~/.yt/token
+          echo ${YT_TOKEN} > ~/.yt/token
 
           TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}"
           TEST_FLAGS="${TEST_FLAGS} --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
