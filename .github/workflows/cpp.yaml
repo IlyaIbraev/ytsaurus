@@ -178,7 +178,7 @@ jobs:
       # - docker-cmake
       - checkout
     with:
-      runs-on-value: ${{ needs.start-vm.outputs.label }}
+      runs-on-value: hu9v2
     secrets:  
       S3_CONFIG: ${{ secrets.S3_CONFIG }}
     uses: ./.github/workflows/check-jobs.yaml
