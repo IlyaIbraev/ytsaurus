@@ -30,7 +30,7 @@ jobs:
             echo ${{ inputs.s3-config }} > ~/.s3cfg
           fi
 
-      - test-dump
+      - name: test-dump
         run: |
           s3cmd put --recursive integration_tests s3://githubci/prod
 
