@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Prepare directories
         run: |
-          sudo rm -r integration_tests
+          sudo rm -r integration_tests || true
           mkdir integration_tests
           mkdir integration_tests/dump_directory
           mkdir integration_tests/test_results
