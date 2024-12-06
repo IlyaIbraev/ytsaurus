@@ -8,7 +8,6 @@ on:
     secrets:
       S3_CONFIG:
         required: false
-        type: string
 
 jobs:
   check:
