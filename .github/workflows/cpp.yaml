@@ -177,7 +177,7 @@ jobs:
       # - start-vm
       - checkout
       # - docker-cmake
-    runs-on: hu9v2
+    runs-on: trampoline
     steps:
       - name: Check
         uses: ./.github/workflows/check-jobs.yaml

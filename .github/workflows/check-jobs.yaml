@@ -11,7 +11,7 @@ on:
 
 jobs:
   check:
-    runs-on: ${{ inputs.runs-on-value }}
+    runs-on: trampoline
     steps:
       - name: Integration tests
         uses: ./.github/workflows/integration-tests.yaml
