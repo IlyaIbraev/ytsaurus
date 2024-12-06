@@ -46,4 +46,3 @@ jobs:
           TEST_FLAGS="{ TEST_FLAGS } --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
           ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ytsaurus/ytsaurus/yt/yt/tests/integration/size_s
 
-      # - name: Dump size_s tests
