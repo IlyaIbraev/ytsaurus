@@ -153,23 +153,23 @@ jobs:
   #     YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
   #   uses: ./.github/workflows/build-jobs.yaml
 
-  docker-ya-make:
-    name: Docker images with ya-make
-    needs:
-      - start-vm
-      - tag
-      - build-ya-make
-    with:
-      runs-on-value: ${{ needs.start-vm.outputs.label }}
-      cpp-build-system: ya-make
-      publish-query-tracker: ${{ github.ref_name == 'main' }}
-      publish-local: true
-      image-tag: ${{ needs.tag.outputs.image-tag }}
-      nightly-image-tag: ${{ needs.tag.outputs.nightly-image-tag }}
-    secrets:
-      GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-      GH_USERNAME: ${{ secrets.GH_USERNAME }}
-    uses: ./.github/workflows/docker-jobs.yaml
+  # docker-ya-make:
+  #   name: Docker images with ya-make
+  #   needs:
+  #     - start-vm
+  #     - tag
+  #     - build-ya-make
+  #   with:
+  #     runs-on-value: ${{ needs.start-vm.outputs.label }}
+  #     cpp-build-system: ya-make
+  #     publish-query-tracker: ${{ github.ref_name == 'main' }}
+  #     publish-local: true
+  #     image-tag: ${{ needs.tag.outputs.image-tag }}
+  #     nightly-image-tag: ${{ needs.tag.outputs.nightly-image-tag }}
+  #   secrets:
+  #     GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+  #     GH_USERNAME: ${{ secrets.GH_USERNAME }}
+  #   uses: ./.github/workflows/docker-jobs.yaml
 
   check:
     name: Check
@@ -177,11 +177,13 @@ jobs:
       - start-vm
       - checkout
       # - docker-cmake
-    with:
-      runs-on-value: ${{ needs.start-vm.outputs.label }}
-    secrets:
-      S3_CONFIG: ${{ secrets.S3_CONFIG }}
-    uses: ./.github/workflows/check-jobs.yaml
+    steps:
+      - name: Check
+        with:
+          runs-on-value: ${{ needs.start-vm.outputs.label }}
+        secrets:
+          S3_CONFIG: ${{ secrets.S3_CONFIG }}
+        uses: ./.github/workflows/check-jobs.yaml
 
   # systest:
   #   name: systest
