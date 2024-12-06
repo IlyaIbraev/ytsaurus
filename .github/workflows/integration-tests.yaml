@@ -48,7 +48,7 @@ jobs:
       - name: Calculate variables
         id: vars
         run: | 
-          TEST_FLAGS="-A -r --run-tagged-tests-on-yt --ytexec-bin ytsaurus/ytsaurus/.github/scripts/ytexec --pytest-args=\"-m 'not ignore_in_opensource'\" --build-results-report=results-report.json --build-results-report-tests-only"
+          TEST_FLAGS="-A -r --run-tagged-tests-on-yt --ytexec-bin ytsaurus/ytsaurus/.github/scripts/ytexec --build-results-report=results-report.json --build-results-report-tests-only"
           TEST_FLAGS="${TEST_FLAGS} --yt-dir=//home/devtools/tmp-cache --yt-proxy=${{ vars.CI_YT_PROXY }} --yt-store --yt-store-threads 8"
           echo "TEST_FLAGS=$TEST_FLAGS" >> $GITHUB_OUTPUT
 
