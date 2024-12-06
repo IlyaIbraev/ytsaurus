@@ -42,6 +42,7 @@ jobs:
       - name: test-dump
         run: |
           source ~/venv_s3cmd/bin/activate
+          touch integration_tests/test
           s3cmd put --recursive integration_tests s3://githubci/prod
 
       - name: Calculate variables
