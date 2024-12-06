@@ -53,7 +53,7 @@ jobs:
       - name: Calculate variables
         id: vars
         run: | 
-          TEST_FLAGS="-A -r --run-tagged-tests-on-yt --ytexec-bin /actions-runner/_work/ytsaurus/ytsaurus/ytsaurus/.github/scripts/ytexec --build-results-report=results-report.json --build-results-report-tests-only"
+          TEST_FLAGS="-A -r --run-tagged-tests-on-yt --ytexec-bin /actions-runner/_work/ytsaurus/ytsaurus/ytsaurus/.github/scripts/ytexec --build-results-report=results-report.json"
           TEST_FLAGS="${TEST_FLAGS} --yt-dir=//home/devtools/tmp-cache --yt-proxy=${{ vars.CI_YT_PROXY }} --yt-store --yt-store-threads 8"
           echo "TEST_FLAGS=$TEST_FLAGS" >> $GITHUB_OUTPUT
 
@@ -68,3 +68,9 @@ jobs:
           TEST_FLAGS="${TEST_FLAGS} --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
           ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ../ytsaurus/ytsaurus/yt/yt/tests/integration/size_s
 
+      # - name: Dump test results
+      #   run: |
+      #     source ~/venv_s3cmd/bin/activate
+      #     python3 ../ytsaurus/ytsaurus/.github/scripts/dump_test_results.py -i integration_tests/test_results/size_s/ -o integration_tests/dump_directory/size_s
+
+          
