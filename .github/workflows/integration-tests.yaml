@@ -72,6 +72,6 @@ jobs:
         run: |
           source ~/venv_s3cmd/bin/activate
           python3 ../ytsaurus/ytsaurus/.github/scripts/dump_test_results.py -i integration_tests/test_results/size_s/ -o integration_tests/dump_directory/size_s
-          s3cmd put --recursive integration_tests/test_results/ s3://githubci/ci/
+          s3cmd put --recursive integration_tests/dump_directory/ s3://githubci/ci/
 
           
