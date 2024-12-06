@@ -179,7 +179,8 @@ jobs:
       - checkout
     with:
       runs-on-value: ${{ needs.start-vm.outputs.label }}
-      s3-config: ${{ secrets.S3_CONFIG }}
+    secrets:  
+      S3_CONFIG: ${{ secrets.S3_CONFIG }}
     uses: ./.github/workflows/check-jobs.yaml
 
   # systest:

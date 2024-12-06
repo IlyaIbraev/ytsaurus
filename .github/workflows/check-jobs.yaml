@@ -5,7 +5,8 @@ on:
       runs-on-value:
         required: true
         type: string
-      s3-config:
+    secrets:
+      S3_CONFIG:
         required: false
         type: string
 
@@ -17,4 +18,5 @@ jobs:
         uses: ./.github/workflows/integration-tests.yaml
         with:
           runs-on-value: ${{ needs.start-vm.outputs.label }}
-          s3-config: ${{ inputs.s3-config }}
+        secrets:
+          S3_CONFIG: ${{ secrets.S3_CONFIG }}
