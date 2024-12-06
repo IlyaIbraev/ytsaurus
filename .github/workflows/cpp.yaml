@@ -46,7 +46,7 @@ jobs:
   checkout:
     name: Checkout sources
     # needs: start-vm
-    runs-on: epdunlt08tmcst93ec34
+    runs-on: hu9v2
     steps:
       - name: Checkout ytsaurus
         uses: actions/checkout@v3
@@ -177,12 +177,12 @@ jobs:
       # - start-vm
       - checkout
       # - docker-cmake
-    runs-on: epdunlt08tmcst93ec34
+    runs-on: hu9v2
     steps:
       - name: Check
         uses: ./.github/workflows/check-jobs.yaml
         with:
-          runs-on-value: epdunlt08tmcst93ec34
+          runs-on-value: hu9v2
           s3-config: ${{ secrets.S3_CONFIG }}
 
   # systest:
