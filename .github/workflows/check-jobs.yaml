@@ -15,4 +15,5 @@ jobs:
     uses: ./.github/workflows/integration-tests.yaml
     with:
       runs-on-value: ${{ needs.start-vm.outputs.label }}
-      inpus.s3-config: ${{ secrets.S3_CONFIG }}
+    secrets:
+      S3_CONFIG: ${{ secrets.S3_CONFIG }}
