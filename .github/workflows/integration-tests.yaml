@@ -28,7 +28,8 @@ jobs:
           then
             echo "S3 dumping disabled"
           else
-            source ../venv/bin/activate    
+            python3.11 -m venv ~/venv_s3cmd
+            source ~/venv_s3cmd/bin/activate
             pip3 install s3cmd
             echo [default] > ~/.s3cfg
             echo access_key = ${{ secrets.S3_ACCESS_KEY }} >> ~/.s3cfg
