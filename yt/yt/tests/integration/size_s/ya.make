@@ -18,5 +18,15 @@ ELSE()
     )
 ENDIF()
 
+IF (OPENSOURCE)
+    YT_SPEC(yt/yt/tests/integration/spec_opensource.yson)
+    REQUIREMENTS(
+        ram:20
+        cpu:6
+    )
+    FORK_TESTS()
+    SPLIT_FACTOR(12)
+ENDIF()
+
 END()
 
