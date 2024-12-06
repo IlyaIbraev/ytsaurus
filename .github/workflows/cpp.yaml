@@ -177,6 +177,7 @@ jobs:
       - start-vm
       - checkout
       # - docker-cmake
+    runs-on: ${{ needs.start-vm.outputs.label }}
     steps:
       - name: Check
         with:
