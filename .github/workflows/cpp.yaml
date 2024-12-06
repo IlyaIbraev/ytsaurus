@@ -180,11 +180,11 @@ jobs:
     runs-on: ${{ needs.start-vm.outputs.label }}
     steps:
       - name: Check
+        uses: ./.github/workflows/check-jobs.yaml
         with:
           runs-on-value: ${{ needs.start-vm.outputs.label }}
         secrets:
           S3_CONFIG: ${{ secrets.S3_CONFIG }}
-        uses: ./.github/workflows/check-jobs.yaml
 
   # systest:
   #   name: systest
