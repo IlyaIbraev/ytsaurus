@@ -5,6 +5,10 @@ on:
       runs-on-value:
         required: true
         type: string
+      s3-config: 
+        required: false
+        type: string
+        default: ""
 
 jobs:
   check:
@@ -27,6 +31,8 @@ jobs:
         uses: ./.github/workflows/integration-tests.yaml
         with:
           runs-on-value: ${{ needs.start-vm.outputs.label }}
+          s3-config: ${{ s3-config }}
+
 
       # - name: Python tests
       #   shell: bash
