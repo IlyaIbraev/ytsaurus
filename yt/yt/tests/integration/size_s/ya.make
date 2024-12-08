@@ -25,7 +25,7 @@ IF (OPENSOURCE)
         cpu:6
     )
     FORK_TESTS()
-    SPLIT_FACTOR(12)
+    SPLIT_FACTOR(50)
 ENDIF()
 
 END()

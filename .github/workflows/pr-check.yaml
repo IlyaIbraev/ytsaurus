@@ -189,7 +189,7 @@ jobs:
         with:
           script: |
             const current_time = new Date().toLocaleString("ru-RU");
-            const message = 'PR autotest finished.\nBuild statuses:\n'
+            const message = 'PR autotest finished.\nStatuses:\n'
             const strawberry_status = 'Strawberry controller: ' + '${{ needs.build-strawberry.result }}' + '\n';
             const cmake_status = 'CMake build: ' + '${{ needs.build-cmake.result }}' + '\n';
             const ya_make_status = 'Ya-make build: ' + '${{ needs.build-ya-make.result }}' + '\n';
