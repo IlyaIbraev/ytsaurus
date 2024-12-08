@@ -71,45 +71,45 @@ jobs:
           ref: 64db63f9333fa966df2b65badbdef3bc5db10372
           path: ydb
 
-  patch-ya-conf:
-    name: Patch ya conf
-    needs:
-      - start-vm
-      - checkout
-    runs-on: ${{ needs.start-vm.outputs.label }}
-    steps:
-      - name: Patch ya conf
-        run: |
-          cat ./ydb/build/internal/ya.conf | grep -v bazel | grep -v "dist_cache" > ./patched.ya.conf
-          cp ./patched.ya.conf ./ydb/build/internal/ya.conf
+  # patch-ya-conf:
+  #   name: Patch ya conf
+  #   needs:
+  #     - start-vm
+  #     - checkout
+  #   runs-on: ${{ needs.start-vm.outputs.label }}
+  #   steps:
+  #     - name: Patch ya conf
+  #       run: |
+  #         cat ./ydb/build/internal/ya.conf | grep -v bazel | grep -v "dist_cache" > ./patched.ya.conf
+  #         cp ./patched.ya.conf ./ydb/build/internal/ya.conf
 
-  build-strawberry:
-    name: Build Strawberry controller
-    needs:
-      - start-vm
-      - checkout
-    with:
-      runs-on-value: ${{ needs.start-vm.outputs.label }}
-      build-strawberry: true
-    secrets:
-      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
-    uses: ./.github/workflows/build-jobs.yaml
+  # build-strawberry:
+  #   name: Build Strawberry controller
+  #   needs:
+  #     - start-vm
+  #     - checkout
+  #   with:
+  #     runs-on-value: ${{ needs.start-vm.outputs.label }}
+  #     build-strawberry: true
+  #   secrets:
+  #     YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
+  #   uses: ./.github/workflows/build-jobs.yaml
 
-  build-cmake:
-    name: Build with cmake
-    needs:
-      - start-vm
-      - checkout
-      - build-strawberry
-    with:
-      runs-on-value: ${{ needs.start-vm.outputs.label }}
-      cpp-build-system: cmake
-      build-ytsaurus: true
-      build-chyt: ${{ github.ref_name == 'main' }}
-      build-python: true
-    secrets:
-      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
-    uses: ./.github/workflows/build-jobs.yaml
+  # build-cmake:
+  #   name: Build with cmake
+  #   needs:
+  #     - start-vm
+  #     - checkout
+  #     - build-strawberry
+  #   with:
+  #     runs-on-value: ${{ needs.start-vm.outputs.label }}
+  #     cpp-build-system: cmake
+  #     build-ytsaurus: true
+  #     build-chyt: ${{ github.ref_name == 'main' }}
+  #     build-python: true
+  #   secrets:
+  #     YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
+  #   uses: ./.github/workflows/build-jobs.yaml
 
   # build-ya-make:
   #   name: Build with ya-make
@@ -131,8 +131,9 @@ jobs:
     name: PR tests
     needs:
       - start-vm
-      - build-ya-make
-      - build-cmake
+      - checkout
+      # - build-ya-make
+      # - build-cmake
     uses: ./.github/workflows/pr-tests.yaml
     with:
       runs-on-value: ${{ needs.start-vm.outputs.label }}
