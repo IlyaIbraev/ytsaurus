@@ -41,12 +41,12 @@ jobs:
         with:
           script: |
             const current_time = new Date().toLocaleString("ru-RU");
-            const message = 'PR tests started. Watch workflow progress [here](https://github.com/IlyaIbraev/ytsaurus/actions/runs/${{ github.run_id }}).';
+            const message = 'PR autuckeck started. Watch workflow progress [here](https://github.com/IlyaIbraev/ytsaurus/actions/runs/${{ github.run_id }}).';
             const { data: comment } = await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '`' + current_time + '`' + ': ' + message
+              body: '`' + current_time + '`' + ' ' + message
             });
             core.setOutput('comment-id', comment.id);
 
@@ -160,6 +160,8 @@ jobs:
       - start-vm
       - build-ya-make
       - notify-pr-start
+      - build-cmake
+      - build-strawberry
     if: ${{ needs.build-ya-make.result == 'success' }}
     uses: ./.github/workflows/pr-tests.yaml
     with:
@@ -169,6 +171,42 @@ jobs:
       YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
       S3_SECRET_NAME: ${{ secrets.S3_SECRET_NAME }}
+
+  notify-pr-finish:
+    name: Notify PR finish
+    needs:
+      - notify-pr-start
+      - pr-tests
+      - start-vm
+      - build-ya-make
+      - build-cmake
+      - build-strawberry
+    runs-on: trampoline
+    if: ${{ always() }}
+    steps:
+      - name: Notify PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const current_time = new Date().toLocaleString("ru-RU");
+            const message = 'PR autotest finished.\nBuild statuses:\n'
+            const strawberry_status = 'Strawberry controller: ' + '${{ needs.build-strawberry.result }}' + '\n';
+            const cmake_status = 'CMake build: ' + '${{ needs.build-cmake.result }}' + '\n';
+            const ya_make_status = 'Ya-make build: ' + '${{ needs.build-ya-make.result }}' + '\n';
+            const tests_status = 'Tests: ' + '${{ needs.pr-tests.result }}' + '\n';
+            const comment = await github.rest.issues.getComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ needs.notify-pr-start.outputs.comment-id }}
+            });
+            const comment_body = comment.data.body;
+            const new_comment_body = comment_body + '\n' + '`' + current_time + '`' + ' ' + message + strawberry_status + cmake_status + ya_make_status + tests_status;
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ inputs.comment-id }},
+              body: new_comment_body
+            });
 
   stop-vm:
     name: Stop VM
