@@ -7,7 +7,7 @@ on:
         type: string
       comment-id:
         required: true
-        type: number
+        type: string
     secrets:
       S3_ACCESS_KEY:
         required: false
