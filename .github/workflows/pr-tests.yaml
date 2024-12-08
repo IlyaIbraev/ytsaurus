@@ -97,9 +97,14 @@ jobs:
           python3 ../ytsaurus/ytsaurus/.github/scripts/dump_test_results.py -i ${{ github.run_id }}/test_results/size_s/ -o ${{ github.run_id }}/dump_directory/size_s
           s3cmd put --recursive ${{ github.run_id }}/dump_directory/ s3://githubci/autotests/${{ github.run_id }}/
 
+  notify:
+    runs-on: trampoline
+    needs: 
+      - integration-test
+    steps:
       - name: Notify PR
         uses: actions/github-script@v7
-        env: 
+        env:
           PULL_REQUEST_NUMBER: ${{ github.event.client_payload.pull_request.number }}
         with:
           script: |
