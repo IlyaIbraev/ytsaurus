@@ -355,7 +355,7 @@ private:
         JobProxyConfigTemplate_ = New<NJobProxy::TJobProxyInternalConfig>();
 
         // Singletons.
-        JobProxyConfigTemplate_->FiberStackPoolSizes = GetConfig()->FiberStackPoolSizes;
+        JobProxyConfigTemplate_->FiberManager = CloneYsonStruct(GetConfig()->FiberManager);
         JobProxyConfigTemplate_->AddressResolver = CloneYsonStruct(GetConfig()->AddressResolver);
         JobProxyConfigTemplate_->AddressResolver->LocalHostNameOverride = NNet::ReadLocalHostName();
 
@@ -452,7 +452,7 @@ private:
         DynamicConfig_.Store(newConfig);
 
         if (NbdThreadPool_ && newConfig->ExecNode->Nbd) {
-            NbdThreadPool_->Configure(newConfig->ExecNode->Nbd->Server->ThreadCount);
+            NbdThreadPool_->SetThreadCount(newConfig->ExecNode->Nbd->Server->ThreadCount);
         }
     }
 

@@ -4,23 +4,23 @@
 
 #include <yt/yt/core/ytree/yson_struct.h>
 
-namespace NYT::NTracing {
+namespace NYT::NProfiling {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class TTracingTransportConfig
+struct TResourceTrackerConfig
     : public NYTree::TYsonStruct
 {
-public:
-    bool SendBaggage;
+    bool Enable;
+    std::optional<double> CpuToVCpuFactor;
 
-    REGISTER_YSON_STRUCT(TTracingTransportConfig);
+    REGISTER_YSON_STRUCT(TResourceTrackerConfig);
 
     static void Register(TRegistrar registrar);
 };
 
-DEFINE_REFCOUNTED_TYPE(TTracingTransportConfig)
+DEFINE_REFCOUNTED_TYPE(TResourceTrackerConfig)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-} // namespace NYT::NTracing
+} // namespace NYT::NProfiling
