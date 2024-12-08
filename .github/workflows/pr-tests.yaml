@@ -22,8 +22,6 @@ env:
 jobs:
   notify-pr-tests-start:
     runs-on: trampoline
-    needs: 
-      - integration-test
     steps:
       - name: Notify PR
         uses: actions/github-script@v7
