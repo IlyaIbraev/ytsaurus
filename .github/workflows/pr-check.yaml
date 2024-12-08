@@ -30,18 +30,25 @@ jobs:
   notify-pr-start:
     name: Notify PR start
     runs-on: trampoline
-    uses: actions/github-script@v7
-    with:
-      script: |
-        const current_time = new Date().toLocaleString("ru-RU");
-        const message = 'PR tests started. Watch workflow progress [here](https://github.com/IlyaIbraev/ytsaurus/actions/runs/${{ github.run_id }}).';
-        const { data: comment } = await github.rest.issues.createComment({
-          issue_number: context.issue.number,
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          body: current_time + ' ' + message
-        });
-        core.setOutput('comment-id', comment.id);
+    outputs:
+      comment-id: ${{ steps.notify-pr.outputs.comment-id }}
+    steps:
+      - name: Notify PR
+        id: notify-pr
+        uses: actions/github-script@v7
+        env:
+          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          script: |
+            const current_time = new Date().toLocaleString("ru-RU");
+            const message = 'PR tests started. Watch workflow progress [here](https://github.com/IlyaIbraev/ytsaurus/actions/runs/${{ github.run_id }}).';
+            const { data: comment } = await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: current_time + ' ' + message
+            });
+            core.setOutput('comment-id', comment.id);
 
   start-vm:
     name: Start VM
