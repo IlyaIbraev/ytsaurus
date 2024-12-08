@@ -37,7 +37,7 @@ jobs:
               comment_id: ${{ inputs.comment-id }}
             });
             const comment_body = comment.data.body;
-            const new_comment_body = comment_body + '\n' + current_time + ' ' + message;
+            const new_comment_body = comment_body + '\n' + '`' + current_time + '`' + ' ' + message;
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -61,7 +61,7 @@ jobs:
       - name: Prepare pytest environment
         shell: bash
         run: |
-          ytsaurus/yt/yt/scripts/prepare_pytest_environment.sh
+          echo hi
 
       # - name: Integration tests
       #   shell: bash
@@ -148,7 +148,7 @@ jobs:
               comment_id: ${{ inputs.comment-id }}
             });
             const comment_body = comment.data.body;
-            const new_comment_body = comment_body + '\n' + current_time + ' ' + message;
+            const new_comment_body = comment_body + '\n' + '`' + current_time + '`' + ' ' + message;
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
