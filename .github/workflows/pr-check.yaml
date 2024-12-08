@@ -127,15 +127,19 @@ jobs:
       YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
     uses: ./.github/workflows/build-jobs.yaml
 
-    pr-tests:
-      name: PR tests
-      needs:
-        - start-vm
-        - build-ya-make
-        - build-cmake
-      uses: ./.github/workflows/pr-tests.yaml
-      with:
-        
+  pr-tests:
+    name: PR tests
+    needs:
+      - start-vm
+      - build-ya-make
+      - build-cmake
+    uses: ./.github/workflows/pr-tests.yaml
+    with:
+      runs-on-value: ${{ needs.start-vm.outputs.label }}
+    secrets:
+      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_NAME: ${{ secrets.S3_SECRET_NAME }}
 
   stop-vm:
     name: Stop VM
