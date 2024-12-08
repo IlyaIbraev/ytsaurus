@@ -57,13 +57,13 @@ jobs:
           TEST_FLAGS="${TEST_FLAGS} --yt-dir=//home/devtools/tmp-cache --yt-proxy=${{ vars.CI_YT_PROXY }} --yt-store --yt-store-threads 8"
           echo "TEST_FLAGS=$TEST_FLAGS" >> $GITHUB_OUTPUT
 
-      - name: Run size_s tests
+      - name: Configure .yt
         run: |
-          pwd
-
           mkdir ~/.yt || true
           echo ${YT_TOKEN} > ~/.yt/token
 
+      - name: Run size_s tests
+        run: |
           TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}"
           TEST_FLAGS="${TEST_FLAGS} --output integration_tests/test_results/size_s -F *test_dynamic_tables.py*"
           ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ../ytsaurus/ytsaurus/yt/yt/tests/integration/size_s || true
