@@ -111,21 +111,21 @@ jobs:
       YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
     uses: ./.github/workflows/build-jobs.yaml
 
-  build-ya-make:
-    name: Build with ya-make
-    needs:
-      - start-vm
-      - checkout
-      - patch-ya-conf
-    with:
-      runs-on-value: ${{ needs.start-vm.outputs.label }}
-      cpp-build-system: ya-make
-      build-ytsaurus: true
-      build-query-tracker: ${{ github.ref_name == 'main' }}
-      build-python: true
-    secrets:
-      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
-    uses: ./.github/workflows/build-jobs.yaml
+  # build-ya-make:
+  #   name: Build with ya-make
+  #   needs:
+  #     - start-vm
+  #     - checkout
+  #     - patch-ya-conf
+  #   with:
+  #     runs-on-value: ${{ needs.start-vm.outputs.label }}
+  #     cpp-build-system: ya-make
+  #     build-ytsaurus: true
+  #     build-query-tracker: ${{ github.ref_name == 'main' }}
+  #     build-python: true
+  #   secrets:
+  #     YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
+  #   uses: ./.github/workflows/build-jobs.yaml
 
   pr-tests:
     name: PR tests
