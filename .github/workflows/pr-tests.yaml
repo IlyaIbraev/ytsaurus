@@ -48,6 +48,8 @@ jobs:
             });
 
   check:
+    needs:
+      - notify-pr-tests-start
     runs-on: ${{ inputs.runs-on-value }}
     steps:
       # - name: Unittests
@@ -79,6 +81,8 @@ jobs:
       #     ytsaurus/yt/odin/tests/run_tests.sh
 
   integration-test:
+    needs:
+      - check
     runs-on: ${{ inputs.runs-on-value }}
     env:
       YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
