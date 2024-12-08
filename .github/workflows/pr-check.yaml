@@ -159,6 +159,7 @@ jobs:
     needs:
       - start-vm
       - build-ya-make
+      - notify-pr-start
     if: ${{ needs.build-ya-make.result == 'success' }}
     uses: ./.github/workflows/pr-tests.yaml
     with:
