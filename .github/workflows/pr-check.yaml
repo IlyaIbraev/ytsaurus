@@ -51,6 +51,8 @@ jobs:
             core.setOutput('comment-id', comment.id);
 
   start-vm:
+    needs:
+      - notify-pr-start
     name: Start VM
     runs-on: trampoline
     outputs:
