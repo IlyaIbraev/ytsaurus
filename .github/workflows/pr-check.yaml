@@ -127,6 +127,16 @@ jobs:
       YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
     uses: ./.github/workflows/build-jobs.yaml
 
+    pr-tests:
+      name: PR tests
+      needs:
+        - start-vm
+        - build-ya-make
+        - build-cmake
+      uses: ./.github/workflows/pr-tests.yaml
+      with:
+        
+
   stop-vm:
     name: Stop VM
     needs:
