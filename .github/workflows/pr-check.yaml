@@ -146,8 +146,9 @@ jobs:
     name: Stop VM
     needs:
       - start-vm
-      - build-ya-make
-      - build-cmake
+      - pr-tests
+      # - build-ya-make
+      # - build-cmake
     runs-on: trampoline
     if: ${{ always() }}
     steps:
