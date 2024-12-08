@@ -104,6 +104,7 @@ jobs:
     name: Patch ya conf
     needs:
       - checkout
+      - start-vm
     runs-on: ${{ needs.start-vm.outputs.label }}
     steps:
       - name: Patch ya conf
@@ -115,6 +116,7 @@ jobs:
     name: Build Strawberry controller
     needs:
       - checkout
+      - start-vm
     with:
       runs-on-value: ${{ needs.start-vm.outputs.label }}
       build-strawberry: true
@@ -125,6 +127,7 @@ jobs:
   build-cmake:
     name: Build with cmake
     needs:
+      - start-vm
       - build-strawberry
     with:
       runs-on-value: ${{ needs.start-vm.outputs.label }}
@@ -140,6 +143,7 @@ jobs:
     name: Build with ya-make
     needs:
       - patch-ya-conf
+      - start-vm
     with:
       runs-on-value: ${{ needs.start-vm.outputs.label }}
       cpp-build-system: ya-make
@@ -153,6 +157,7 @@ jobs:
   pr-tests:
     name: PR tests
     needs:
+      - start-vm
       - build-ya-make
     if: ${{ needs.build-ya-make.result == 'success' }}
     uses: ./.github/workflows/pr-tests.yaml
