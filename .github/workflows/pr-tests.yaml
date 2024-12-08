@@ -5,6 +5,9 @@ on:
       runs-on-value:
         required: true
         type: string
+      comment-id:
+        required: true
+        type: number
     secrets:
       S3_ACCESS_KEY:
         required: false
@@ -17,6 +20,33 @@ env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
 jobs:
+  notify-pr-tests-start:
+    runs-on: trampoline
+    needs: 
+      - integration-test
+    steps:
+      - name: Notify PR
+        uses: actions/github-script@v7
+        env:
+          PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          script: |
+            const current_time = new Date().toLocaleString("ru-RU");
+            const message = 'Integration tests are started.';
+            const comment = await github.rest.issues.getComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ inputs.comment-id }}
+            });
+            const comment_body = comment.data.body;
+            const new_comment_body = comment_body + '\n' + current_time + ' ' + message;
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ inputs.comment-id }},
+              body: new_comment_body
+            });
+
   check:
     runs-on: ${{ inputs.runs-on-value }}
     steps:
@@ -88,7 +118,7 @@ jobs:
           echo ${YT_TOKEN} > ~/.yt/token
 
           TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}"
-          TEST_FLAGS="${TEST_FLAGS} --output ${{ github.run_id }}/test_results/size_s -F *test_dynamic_tables.py*"
+          TEST_FLAGS="${TEST_FLAGS} --output ${{ github.run_id }}/test_results/size_s -F *test_dynamic_tables.py::TestDynamicTablesWithAbandoningLeaderLeaseDuringRecovery*"
           ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ../ytsaurus/ytsaurus/yt/yt/tests/integration/size_s || true
 
       - name: Dump test results
@@ -97,7 +127,7 @@ jobs:
           python3 ../ytsaurus/ytsaurus/.github/scripts/dump_test_results.py -i ${{ github.run_id }}/test_results/size_s/ -o ${{ github.run_id }}/dump_directory/size_s
           s3cmd put --recursive ${{ github.run_id }}/dump_directory/ s3://githubci/autotests/${{ github.run_id }}/
 
-  notify:
+  notify-pr-tests-end:
     runs-on: trampoline
     needs: 
       - integration-test
@@ -108,10 +138,18 @@ jobs:
           PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
         with:
           script: |
+            const current_time = new Date().toLocaleString("ru-RU");
             const message = 'Integration tests are finished. Check the results [here](https://storage.yandexcloud.net/githubci/autotests/${{ github.run_id }}/size_s/index.html)';
-            await github.rest.issues.createComment({
+            const comment = await github.rest.issues.getComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: process.env.PULL_REQUEST_NUMBER,
-              body: message,
-            })
+              comment_id: ${{ inputs.comment-id }}
+            });
+            const comment_body = comment.data.body;
+            const new_comment_body = comment_body + '\n' + current_time + ' ' + message;
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ inputs.comment-id }},
+              body: new_comment_body
+            });

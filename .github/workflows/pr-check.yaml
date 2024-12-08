@@ -27,6 +27,22 @@ env:
 
 jobs:
 
+  notify-pr-start:
+    name: Notify PR start
+    runs-on: trampoline
+    uses: actions/github-script@v7
+    with:
+      script: |
+        const current_time = new Date().toLocaleString("ru-RU");
+        const message = 'PR tests started. Watch workflow progress [here](https://github.com/IlyaIbraev/ytsaurus/actions/runs/${{ github.run_id }}).';
+        const { data: comment } = await github.rest.issues.createComment({
+          issue_number: context.issue.number,
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          body: current_time + ' ' + message
+        });
+        core.setOutput('comment-id', comment.id);
+
   start-vm:
     name: Start VM
     runs-on: trampoline
@@ -134,6 +150,7 @@ jobs:
   pr-tests:
     name: PR tests
     needs:
+      - notify-pr-start
       - start-vm
       - checkout
       # - build-ya-make
@@ -141,6 +158,7 @@ jobs:
     uses: ./.github/workflows/pr-tests.yaml
     with:
       runs-on-value: ${{ needs.start-vm.outputs.label }}
+      comment-id: ${{ needs.notify-pr-start.outputs.comment-id }}
     secrets:
       YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
