@@ -3,7 +3,7 @@ name: Go SDK CI
 on:
   push:
     branches:
-      - main2
+      - main
 
 jobs:
   check:

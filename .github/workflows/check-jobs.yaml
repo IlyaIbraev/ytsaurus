@@ -5,22 +5,35 @@ on:
       runs-on-value:
         required: true
         type: string
-    secrets:
-      S3_ACCESS_KEY:
-        required: false
-      S3_SECRET_NAME:
-        required: false
-      YA_YT_TOKEN:
-        required: false
-
 
 jobs:
-  integration-test:
-    name: Integration tests
-    uses: ./.github/workflows/integration-tests.yaml
-    with:
-      runs-on-value: ${{ inputs.runs-on-value }}
-    secrets:
-      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-      S3_SECRET_NAME: ${{ secrets.S3_SECRET_NAME }}
-      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
+  check:
+    runs-on: ${{ inputs.runs-on-value }}
+    steps:
+      - name: Unittests
+        shell: bash
+        run: |
+          cp ./ytsaurus/yt/yt/scripts/run_unittests.sh ../build_cmake_release
+          ln -s $(pwd)/../build_cmake_release $(pwd)/../build
+          cd ../build
+          ./run_unittests.sh
+
+      - name: Prepare pytest environment
+        shell: bash
+        run: |
+          ytsaurus/yt/yt/scripts/prepare_pytest_environment.sh
+
+      - name: Integration tests
+        shell: bash
+        run: |
+          ytsaurus/yt/yt/scripts/run_integration_tests.sh
+
+      - name: Python tests
+        shell: bash
+        run: |
+          ytsaurus/yt/yt/scripts/run_python_tests.sh
+
+      - name: Odin tests
+        shell: bash
+        run: |
+          ytsaurus/yt/odin/tests/run_tests.sh
