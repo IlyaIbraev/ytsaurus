@@ -111,7 +111,6 @@ jobs:
         id: vars
         run: | 
           TEST_FLAGS="-A -r --run-tagged-tests-on-yt --ytexec-bin /actions-runner/_work/ytsaurus/ytsaurus/ytsaurus/.github/scripts/ytexec --build-results-report=results-report.json"
-          TEST_FLAGS="${TEST_FLAGS} --yt-dir=//home/devtools/tmp-cache --yt-proxy=${{ vars.CI_YT_PROXY }} --yt-store --yt-store-threads 8"
           echo "TEST_FLAGS=$TEST_FLAGS" >> $GITHUB_OUTPUT
 
       - name: Run size_s tests
@@ -132,7 +131,7 @@ jobs:
 
   notify-pr-tests-end:
     runs-on: trampoline
-    needs: 
+    needs:
       - integration-test
     steps:
       - name: Notify PR

@@ -204,7 +204,7 @@ jobs:
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ inputs.comment-id }},
+              comment_id: ${{ needs.notify-pr-start.outputs.comment-id }},
               body: new_comment_body
             });
 
