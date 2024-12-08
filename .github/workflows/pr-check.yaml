@@ -46,7 +46,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: current_time + ' ' + message
+              body: '`' + current_time + '`' + ': ' + message
             });
             core.setOutput('comment-id', comment.id);
 
