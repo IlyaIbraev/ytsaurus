@@ -577,8 +577,9 @@ public:
     static void Register(TRegistrar registrar);
 };
 
-DECLARE_REFCOUNTED_CLASS(TGangManagerConfig)
 DEFINE_REFCOUNTED_TYPE(TGangManagerConfig)
+
+////////////////////////////////////////////////////////////////////////////////
 
 class TVanillaOperationOptions
     : public TOperationOptions
@@ -725,7 +726,6 @@ public:
     static void Register(TRegistrar registrar);
 };
 
-DECLARE_REFCOUNTED_CLASS(TJobTrackerTestingOptions)
 DEFINE_REFCOUNTED_TYPE(TJobTrackerTestingOptions)
 
 class TJobTrackerConfig
@@ -1254,6 +1254,8 @@ public:
     bool FetchSchemasFromExternalCellTags;
 
     bool EnableJobFailsTolerance;
+
+    std::optional<ui32> AllocationJobCountLimit;
 
     REGISTER_YSON_STRUCT(TControllerAgentConfig);
 

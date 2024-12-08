@@ -15,6 +15,8 @@
 
 #include <library/cpp/yt/mlock/mlock.h>
 
+#include <library/cpp/yt/mlock/mlock.h>
+
 #include <util/system/thread.h>
 
 namespace NYT::NYqlAgent {
@@ -22,7 +24,7 @@ namespace NYT::NYqlAgent {
 ////////////////////////////////////////////////////////////////////////////////
 
 class TYqlAgentProgram
-    : public TProgram
+    : public virtual TProgram
     , public TProgramPdeathsigMixin
     , public TProgramSetsidMixin
     , public TProgramConfigMixin<TYqlAgentServerConfig>
@@ -46,16 +48,8 @@ protected:
         // We intentionally omit EnablePhdrCache() because not only YQL is loaded as a shared library, but also
         // YQL UDFs, and they may be user-provided in runtime for particular query.
         ConfigureAllocator({});
-
-        if (HandleSetsidOptions()) {
-            return;
-        }
-        if (HandlePdeathsigOptions()) {
-            return;
-        }
-        if (HandleConfigOptions()) {
-            return;
-        }
+        MlockFileMappings();
+        RunMixinCallbacks();
 
         auto config = GetConfig();
         auto configNode = GetConfigNode();
