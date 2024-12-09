@@ -119,7 +119,7 @@ jobs:
           echo ${YT_TOKEN} > ~/.yt/token
 
           TEST_FLAGS="${{ steps.vars.outputs.TEST_FLAGS }}"
-          TEST_FLAGS="${TEST_FLAGS} --output ${{ github.run_id }}/test_results/size_s -F *test_dynamic_tables.py::TestDynamicTablesWithAbandoningLeaderLeaseDuringRecovery*"
+          TEST_FLAGS="${TEST_FLAGS} --output ${{ github.run_id }}/test_results/size_s"
           ../ytsaurus/ytsaurus/ya make ${TEST_FLAGS} ../ytsaurus/ytsaurus/yt/yt/tests/integration/size_s
 
       - name: Dump test results
