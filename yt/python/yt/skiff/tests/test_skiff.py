@@ -363,7 +363,3 @@ def test_skiff_other_columns():
     copied_other_columns = copy.deepcopy(other_columns)
     assert copied_other_columns["key"] == 20
     assert len(copied_other_columns) == 1
-
-
-def test_f():
-    assert False
