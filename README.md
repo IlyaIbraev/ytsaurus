@@ -18,6 +18,7 @@ You can read [post about YTsaurus](https://medium.com/p/42e7f5fa5fc6) or check v
 ## Advantages of the platform
 
 ### Multitenant ecosystem
+
 * A set of interrelated subsystems: MapReduce, an SQL query engine, a job schedule, and a key-value store for OLTP workloads.
 * Support for large numbers of users that eliminates multiple installations and streamlines hardware usage
 ### Reliability and stability
