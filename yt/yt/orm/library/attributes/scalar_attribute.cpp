@@ -399,25 +399,8 @@ protected:
     std::vector<std::pair<TString, INodePtr>> SortedMapChildren() const
     {
         auto children = CurrentValue_->AsMap()->GetChildren();
-        std::sort(
-            children.begin(),
-            children.end(),
-            [] (const auto& lhs, const auto& rhs) { return lhs.first < rhs.first; });
+        std::ranges::sort(children, std::less{}, &std::pair<std::string, INodePtr>::first);
         return {children.begin(), children.end()};
-    }
-
-    // Put the new entry at |index| and slide everything forward. Makes a noop if index was pointing
-    // after the last entry.
-    static void RotateLastEntryBeforeIndex(
-        Message* message,
-        const FieldDescriptor* fieldDescriptor,
-        int index)
-    {
-        const auto* reflection = message->GetReflection();
-        int last = reflection->FieldSize(*message, fieldDescriptor) - 1;
-        for (int pos = index; pos < last; ++pos) {
-            reflection->SwapElements(message, fieldDescriptor, pos, last);
-        }
     }
 }; // TSetVisitor
 

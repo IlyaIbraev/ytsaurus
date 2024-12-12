@@ -203,6 +203,42 @@ DEFINE_REFCOUNTED_TYPE(TFairShareStrategySchedulingSegmentsConfig)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+class TGpuAllocationSchedulerConfig
+    : public NYTree::TYsonStruct
+{
+public:
+    TDuration InitializationTimeout;
+
+    TDuration ModuleReconsiderationTimeout;
+
+    TDuration PreemptForLargeOperationTimeout;
+
+    THashSet<TString> DataCenters;
+
+    THashSet<TString> InfinibandClusters;
+
+    ESchedulingSegmentModuleAssignmentHeuristic ModuleAssignmentHeuristic;
+
+    ESchedulingSegmentModulePreemptionHeuristic ModulePreemptionHeuristic;
+
+    // TODO(omgronny): Refactor modules config.
+    ESchedulingSegmentModuleType ModuleType;
+
+    bool EnableDetailedLogs;
+
+    TDuration PriorityModuleAssignmentTimeout;
+
+    const THashSet<TString>& GetModules() const;
+
+    REGISTER_YSON_STRUCT(TGpuAllocationSchedulerConfig);
+
+    static void Register(TRegistrar registrar);
+};
+
+DEFINE_REFCOUNTED_TYPE(TGpuAllocationSchedulerConfig)
+
+////////////////////////////////////////////////////////////////////////////////
+
 class TFairShareStrategySsdPriorityPreemptionConfig
     : public NYTree::TYsonStruct
 {
@@ -394,8 +430,6 @@ public:
 
     bool UseUserDefaultParentPoolMap;
 
-    bool EnableResourceUsageSnapshot;
-
     int MaxEventLogPoolBatchSize;
     int MaxEventLogOperationBatchSize;
 
@@ -527,8 +561,6 @@ public:
 
     //! Template pool tree configs.
     THashMap<TString, TPoolTreesTemplateConfigPtr> TemplatePoolTreeConfigMap;
-
-    bool EnablePoolTreesConfigCache;
 
     TDuration SchedulerTreeAlertsUpdatePeriod;
 
@@ -819,10 +851,6 @@ public:
 
     TDuration ExecNodeDescriptorsUpdatePeriod;
 
-    bool AlwaysSendControllerAgentDescriptors;
-
-    bool SendFullControllerAgentDescriptorsForAllocations;
-
     //! Allocations running on node are logged periodically or when they change their state.
     TDuration AllocationsLoggingPeriod;
 
@@ -962,8 +990,6 @@ public:
     //! Minimum amount of resources to continue schedule allocation attempts.
     std::optional<TJobResourcesConfigPtr> MinSpareAllocationResourcesOnNode;
 
-    bool SendPreemptionReasonInNodeHeartbeat;
-
     bool ConsiderDiskQuotaInPreemptiveSchedulingDiscount;
 
     //! Duration of ScheduleAllocation call to log this result.
@@ -981,8 +1007,6 @@ public:
     TDuration ScheduleAllocationEntryCheckPeriod;
 
     NRpc::TResponseKeeperConfigPtr OperationServiceResponseKeeper;
-
-    bool WaitForAgentHeartbeatDuringOperationUnregistrationAtController;
 
     bool CrashOnAllocationHeartbeatProcessingException;
 

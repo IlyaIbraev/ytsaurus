@@ -72,7 +72,7 @@ class TestShuffleService(YTEnvSetup):
 
         wait(lambda: active_shuffle_count_sensor.get() == 0, iter=300, sleep_backoff=0.1)
 
-        with raises_yt_error(f'Shuffle with id "{shuffle_handle["transaction_id"]}" does not exist'):
+        with raises_yt_error(f'Shuffle with id {shuffle_handle["transaction_id"]} does not exist'):
             read_shuffle_data(shuffle_handle, 1)
 
     @authors("apollo1321")
@@ -90,6 +90,25 @@ class TestShuffleService(YTEnvSetup):
         write_shuffle_data(shuffle_handle, "key2", rows[1])
 
         assert read_shuffle_data(shuffle_handle, 0) == rows
+
+    @authors("apollo1321")
+    def test_write_unsorted_rows(self):
+        parent_transaction = start_transaction(timeout=60000)
+
+        shuffle_handle = start_shuffle("intermediate", partition_count=11, parent_transaction_id=parent_transaction)
+
+        # Verify that the writer does not enforce any specific sort order on the rows.
+        rows = [
+            {"key1": 5, "key2": -1},
+            {"key1": 0, "key2": -10},
+            {'key1': 4, "key2": -42},
+            {'key1': 4, "key2": 10},
+        ]
+        write_shuffle_data(shuffle_handle, "key1", rows)
+
+        assert read_shuffle_data(shuffle_handle, 0) == [rows[1]]
+        assert read_shuffle_data(shuffle_handle, 5) == [rows[0]]
+        assert read_shuffle_data(shuffle_handle, 4) == [rows[2], rows[3]]
 
     @authors("apollo1321")
     def test_invalid_arguments(self):
