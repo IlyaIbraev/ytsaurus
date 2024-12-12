@@ -21,6 +21,8 @@ zd
 ### Multitenant ecosystem
 * A set of interrelated subsystems: MapReduce, an SQL query engine, a job schedule, and a key-value store for OLTP workloads.
 * Support for large numbers of users that eliminates multiple installations and streamlines hardware usage
+
+* 
 ### Reliability and stability
 * No single point of failure 
 * Automated replication between servers 
