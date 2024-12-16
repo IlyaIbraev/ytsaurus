@@ -33,6 +33,8 @@
 
 #include <yt/yt/library/program/public.h>
 
+#include <yt/yt/library/server_program/config.h>
+
 namespace NYT::NScheduler {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -788,16 +790,8 @@ class TResourceMeteringConfig
     : public NYTree::TYsonStruct
 {
 public:
-    //! Enables new format for abc_id.
-    //! It enables writing abc_id as integer and disable writing could_id and folder_id.
-    bool EnableNewAbcFormat;
-
     //! Default ABC id for use in resource metering
     int DefaultAbcId;
-
-    //! Default id for all metering records.
-    TString DefaultCloudId;
-    TString DefaultFolderId;
 
     //! Enable separate schemas for guarantees and allocations.
     bool EnableSeparateSchemaForAllocation;
@@ -1029,9 +1023,9 @@ DEFINE_REFCOUNTED_TYPE(TSchedulerConfig)
 
 class TSchedulerBootstrapConfig
     : public TNativeServerConfig
+    , public TServerProgramConfig
 {
 public:
-
     NScheduler::TSchedulerConfigPtr Scheduler;
 
     //! Known scheduler addresses.

@@ -40,20 +40,10 @@ public:
             Config_ = config;
         }
 
-        NLogging::RegisterDynamicTableLogWriterFactory();
-
         ConfigureSingletons(static_cast<TSingletonsConfigPtr>(config));
 
         NChunkClient::TDispatcher::Get()->Configure(config->ChunkClientDispatcher);
         NAuth::TNativeAuthenticationManager::Get()->Configure(config->NativeAuthenticationManager);
-
-        if (config->EnablePortoResourceTracker) {
-            NContainers::EnablePortoResourceTracker(config->PodSpec);
-        }
-
-        if (config->HotswapManager) {
-            NDiskManager::THotswapManager::Configure(config->HotswapManager);
-        }
     }
 
     void ReconfigureNativeSingletons(const TNativeSingletonsDynamicConfigPtr& dynamicConfig)
