@@ -44,8 +44,6 @@ on:
         type: boolean
 
     secrets:
-      YA_YT_TOKEN:
-        required: true
       BAZEL_USERNAME:
         required: false
       BAZEL_PASSWORD:
