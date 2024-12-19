@@ -287,7 +287,7 @@ jobs:
           export YTSAURUS_SOURCE_PATH="$(realpath $(pwd)/../ytsaurus/ytsaurus)"
           export YDB_SOURCE_PATH="$(realpath $(pwd)/../ytsaurus/ydb)"
           export YQL_BUILD_PATH="."
-          export BUILD_FLAGS="${{ steps.vars.outputs.BUILD_FLAGS }} -DSTRIP=${{ steps.vars.outputs.STRIP_VALUE }} --no-bazel-remote-store"
+          export BUILD_FLAGS="${{ steps.vars.outputs.BUILD_FLAGS }} -DSTRIP=${{ steps.vars.outputs.STRIP_VALUE }}"
 
           SCRIPT_FLAGS=""
           if [ "${{ inputs.build-yql-python-udfs }}" == "true" ]; then
