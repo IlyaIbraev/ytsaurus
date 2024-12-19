@@ -46,6 +46,11 @@ on:
     secrets:
       YA_YT_TOKEN:
         required: true
+      BAZEL_USERNAME:
+        required: false
+      BAZEL_PASSWORD:
+        required: false
+      
 
 jobs:
   venv:
@@ -207,8 +212,6 @@ jobs:
     needs: venv
     runs-on: ${{ inputs.runs-on-value }}
     timeout-minutes: 480
-    env:
-      YA_YT_TOKEN: ${{ secrets.YA_YT_TOKEN }}
     if: ${{ inputs.cpp-build-system == 'ya-make' }}
     strategy:
       matrix:
@@ -217,10 +220,10 @@ jobs:
       - name: Calculate variables
         id: vars
         run: |
-          BUILD_FLAGS="--thinlto -DCGO_ENABLED=0 -DCFLAGS=-fsized-deallocation --bazel-remote-store --bazel-remote-base-uri=http://10.131.0.43:8888"
+          BUILD_FLAGS="--thinlto -DCGO_ENABLED=0 -DCFLAGS=-fsized-deallocation --bazel-remote-store --bazel-remote-base-uri=${{ vars.BAZEL_HTTP }}"
 
           if [ "${{ inputs.update-remote-cache }}" == "true" ]; then
-            BUILD_FLAGS="${BUILD_FLAGS} --bazel-remote-put"
+            BUILD_FLAGS="${BUILD_FLAGS} --bazel-remote-put --bazel-remote-username=${{ secrets.BAZEL_USERNAME }} --bazel-remote-password=${{ secrets.BAZEL_PASSWORD }}"
           fi
 
           STRIP_VALUE=no
